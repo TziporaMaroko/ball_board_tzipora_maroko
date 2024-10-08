@@ -124,62 +124,43 @@ function renderBoard(board) {
 	var elBoard = document.querySelector('.board');
 	elBoard.innerHTML = strHTML;
 }
+function clearCell() {
+	// Model:
+	gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
+	// Dom:
+	renderCell(gGamerPos, '');
+}
 
+function moveGamer() {
+	gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
+	// DOM:
+	renderCell(gGamerPos, GAMER_IMG);
+}
+
+// Move the player if the player reaches the edges of the board
 function moveOnEdges(i,j) { 
 	if (i===-1&&j===5){
-		// Model:
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
-		// Dom:
-		renderCell(gGamerPos, '');
+		clearCell();
 		gGamerPos.i = 9;
-		gGamerPos.j = 5;
-		// MOVING from current position
-		
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
-		// DOM:
-		renderCell(gGamerPos, GAMER_IMG);
+		moveGamer();
 		return true;
 	}
 	else if (i===10&&j===5){
-		// Model:
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
-		// Dom:
-		renderCell(gGamerPos, '');
+		clearCell();
 		gGamerPos.i = 0;
-		gGamerPos.j = 5;
-		// MOVING from current position
-		
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
-		// DOM:
-		renderCell(gGamerPos, GAMER_IMG);
+		moveGamer();
 		return true;
 	}
 	else if (i===5&&j===-1){
-		// Model:
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
-		// Dom:
-		renderCell(gGamerPos, '');
-		gGamerPos.i = 5;
+		clearCell();
 		gGamerPos.j = 11;
-		// MOVING from current position
-		
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
-		// DOM:
-		renderCell(gGamerPos, GAMER_IMG);
+		moveGamer();
 		return true;
 	}
 	else if (i===5&&j===12){
-		// Model:
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
-		// Dom:
-		renderCell(gGamerPos, '');
-		gGamerPos.i = 5;
+		clearCell();
 		gGamerPos.j = 0;
-		// MOVING from current position
-		
-		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
-		// DOM:
-		renderCell(gGamerPos, GAMER_IMG);
+		moveGamer();
 		return true;
 	}
 	return false;
