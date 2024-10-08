@@ -6,15 +6,48 @@ var GAMER = 'GAMER';
 var GAMER_IMG = '<img src="img/gamer.png" />';
 var BALL_IMG = '<img src="img/ball.png" />';
 
-var score = 0;
+let score = 0;
 var gBoard;
 var gGamerPos;
+let interval;
+let isGameRunning = true; 
+
 function initGame() {
 	gGamerPos = { i: 2, j: 9 };
 	gBoard = buildBoard();
 	renderBoard(gBoard);
+	
+	// Start adding balls every 2 seconds
+    interval = setInterval(addBall, 2000);
 }
 
+// Function to place a ball at a random empty cell
+function addBall() {
+    if (!isGameRunning) return;
+
+    // Get all empty cells
+    const emptyCells = [];
+    for (var i = 1; i < gBoard.length - 1; i++) {
+        for (var j = 1; j < gBoard[0].length - 1; j++) {
+            if (!gBoard[i][j].gameElement) {
+                emptyCells.push({ i, j });
+            }
+        }
+    }
+
+    // If no empty cell is found, do nothing
+    if (emptyCells.length === 0) return;
+
+    // Choose a random empty cell
+    const randIdx = Math.floor(Math.random() * emptyCells.length);
+    const randCell = emptyCells[randIdx];
+
+    // Place the ball in the selected empty cell
+    gBoard[randCell.i][randCell.j].gameElement = BALL;
+
+    // Render the cell with the new ball
+    renderCell(randCell, BALL_IMG);
+}
 
 function buildBoard() {
 	// Create the Matrix
@@ -160,11 +193,22 @@ function getClassName(location) {
 	return cellClass;
 }
 
+// Update the score in the UI 
+function renderScore() {
+	var elScore = document.getElementById('score');
+    elScore.innerText = score;
+}
+
+// Update the score 
 function updateScore() {
 	score++;
-    console.log('Score:', score);
-    document.getElementById('score').innerText = score;
-    // if (score === 10) {
-    //     alert('Congratulations! You won!');
-    // }
+	renderScore();
+}
+
+// Reset the game to initial state and score to 0
+function resetGame(){
+	clearInterval(interval);
+	score = 0;
+	initGame();
+	renderScore();
 }
