@@ -11,11 +11,13 @@ var gBoard;
 var gGamerPos;
 let interval;
 let isGameRunning = true; 
+let ballsCount=0;
 
 function initGame() {
 	gGamerPos = { i: 2, j: 9 };
 	gBoard = buildBoard();
 	renderBoard(gBoard);
+	ballsCount = 2;
 	
 	// Start adding balls every 2 seconds
     interval = setInterval(addBall, 2000);
@@ -37,14 +39,14 @@ function addBall() {
 
     // If no empty cell is found, do nothing
     if (emptyCells.length === 0) return;
-
+	ballsCount++;
     // Choose a random empty cell
     const randIdx = Math.floor(Math.random() * emptyCells.length);
     const randCell = emptyCells[randIdx];
 
     // Place the ball in the selected empty cell
     gBoard[randCell.i][randCell.j].gameElement = BALL;
-
+	
     // Render the cell with the new ball
     renderCell(randCell, BALL_IMG);
 }
@@ -136,6 +138,10 @@ function moveTo(i, j) {
 		if (targetCell.gameElement === BALL) {
 			console.log('Collecting!');
 			updateScore();
+			ballsCount--;
+			if (ballsCount === 0) {
+				endGame();
+			}			
 		}
 
 		// MOVING from current position
@@ -211,4 +217,12 @@ function resetGame(){
 	score = 0;
 	initGame();
 	renderScore();
+}
+
+// End the game
+function endGame() {
+    isGameRunning = false;
+    console.log('Game Over!');
+    alert('Game Over! Your Score is:'+ score);
+    resetGame();
 }
