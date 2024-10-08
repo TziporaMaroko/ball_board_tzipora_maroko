@@ -102,6 +102,7 @@ function moveTo(i, j) {
 
 		if (targetCell.gameElement === BALL) {
 			console.log('Collecting!');
+			updateScore();
 		}
 
 		// MOVING from current position
@@ -159,3 +160,11 @@ function getClassName(location) {
 	return cellClass;
 }
 
+function updateScore() {
+	score++;
+    console.log('Score:', score);
+    document.getElementById('score').innerText = score;
+    // if (score === 10) {
+    //     alert('Congratulations! You won!');
+    // }
+}
