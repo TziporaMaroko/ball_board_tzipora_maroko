@@ -68,6 +68,9 @@ function buildBoard() {
 			// Place Walls at edges
 			if (i === 0 || i === board.length - 1 || j === 0 || j === board[0].length - 1) {
 				cell.type = WALL;
+				if (i===0&&j===5 || i===9&&j===5 || j===0&&i===5 || j===11&&i===5) {
+					cell.type = FLOOR;
+                }
 			}
 
 			// Add created cell to The game board
@@ -122,9 +125,70 @@ function renderBoard(board) {
 	elBoard.innerHTML = strHTML;
 }
 
+function moveOnEdges(i,j) { 
+	if (i===-1&&j===5){
+		// Model:
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
+		// Dom:
+		renderCell(gGamerPos, '');
+		gGamerPos.i = 9;
+		gGamerPos.j = 5;
+		// MOVING from current position
+		
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
+		// DOM:
+		renderCell(gGamerPos, GAMER_IMG);
+		return true;
+	}
+	else if (i===10&&j===5){
+		// Model:
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
+		// Dom:
+		renderCell(gGamerPos, '');
+		gGamerPos.i = 0;
+		gGamerPos.j = 5;
+		// MOVING from current position
+		
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
+		// DOM:
+		renderCell(gGamerPos, GAMER_IMG);
+		return true;
+	}
+	else if (i===5&&j===-1){
+		// Model:
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
+		// Dom:
+		renderCell(gGamerPos, '');
+		gGamerPos.i = 5;
+		gGamerPos.j = 11;
+		// MOVING from current position
+		
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
+		// DOM:
+		renderCell(gGamerPos, GAMER_IMG);
+		return true;
+	}
+	else if (i===5&&j===12){
+		// Model:
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
+		// Dom:
+		renderCell(gGamerPos, '');
+		gGamerPos.i = 5;
+		gGamerPos.j = 0;
+		// MOVING from current position
+		
+		gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
+		// DOM:
+		renderCell(gGamerPos, GAMER_IMG);
+		return true;
+	}
+	return false;
+}
 // Move the player to a specific location
 function moveTo(i, j) {
 
+	if (moveOnEdges(i, j)) return;
+	
 	var targetCell = gBoard[i][j];
 	if (targetCell.type === WALL) return;
 
@@ -149,7 +213,7 @@ function moveTo(i, j) {
 		gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
 		// Dom:
 		renderCell(gGamerPos, '');
-
+		
 		// MOVING to selected position
 		// Model:
 		gGamerPos.i = i;
